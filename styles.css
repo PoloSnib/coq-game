@@ -1,0 +1,177 @@
+:root {
+    --road-dark: hsl(0, 0%, 18%);
+    --road-light: hsl(0, 0%, 23%);
+    --lane-yellow: hsl(48, 100%, 50%);
+    --grass: hsl(106, 47%, 60%);
+    --sky: linear-gradient(180deg, hsl(210, 80%, 85%) 0%, hsl(120, 60%, 85%) 100%);
+    --overlay-bg: hsla(0, 0%, 0%, 0.67);
+    --btn-bg: hsl(46, 98%, 63%);
+    --btn-hover: hsl(46, 98%, 70%);
+    --btn-shadow: 0 2px 16px 0 hsla(0,0%,0%,0.12);
+    --font-main: 'Arial Rounded MT Bold', 'Arial', sans-serif;
+    --chicken-body: hsl(45, 95%, 85%);
+    --chicken-beak: hsl(36, 84%, 55%);
+    --chicken-comb: hsl(0, 80%, 60%);
+    --vehicle-red: hsl(2, 85%, 60%);
+    --vehicle-blue: hsl(210, 80%, 60%);
+    --vehicle-yellow: hsl(50, 95%, 62%);
+}
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background: var(--sky);
+    min-height: 100vh;
+    font-family: var(--font-main);
+}
+#game-container {
+    width: 100vw;
+    height: 100vh;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--sky);
+    overflow: hidden;
+}
+#game-canvas {
+    background: var(--sky);
+    box-shadow: 0 8px 48px 0 hsla(0,0%,0%,0.18);
+    border-radius: 16px;
+    outline: none;
+    touch-action: manipulation;
+    width: 100vw;
+    max-width: 720px;
+    height: 90vh;
+    max-height: 960px;
+    margin: auto;
+    display: block;
+    transition: box-shadow 0.2s cubic-bezier(.4,0,.2,1);
+}
+#ui-overlay {
+    position: absolute;
+    left: 0; right: 0; top: 0; bottom: 0;
+    pointer-events: none;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.menu-overlay,
+.gameover-overlay {
+    pointer-events: auto;
+    background: var(--overlay-bg);
+    color: white;
+    font-family: var(--font-main);
+    border-radius: 16px;
+    box-shadow: var(--btn-shadow);
+    padding: 32px 40px;
+    text-align: center;
+    min-width: 260px;
+    min-height: 220px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    animation: fadein 0.3s ease;
+}
+
+.menu-overlay h1,
+.gameover-overlay h1 {
+    margin-top: 0;
+    font-size: 2.4rem;
+    letter-spacing: 1px;
+    color: hsl(46, 98%, 70%);
+    text-shadow: 0 2px 6px hsla(0,0%,0%,.18);
+}
+
+.menu-overlay button,
+.gameover-overlay button {
+    margin-top: 32px;
+    padding: 12px 36px;
+    font-size: 1.3rem;
+    border: none;
+    border-radius: 8px;
+    background: var(--btn-bg);
+    color: #333;
+    font-family: var(--font-main);
+    cursor: pointer;
+    box-shadow: var(--btn-shadow);
+    transition: background 0.18s cubic-bezier(.4,0,.2,1);
+    outline: none;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+.menu-overlay button:hover,
+.gameover-overlay button:hover {
+    background: var(--btn-hover);
+}
+
+/* --- NEW: Score/Lives/Level separate boxes --- */
+.score-label-container {
+    position: fixed;
+    right: 32px;
+    top: calc(24px + 44px + 10px); /* 24px (volume bar top) + ~44px (volume bar height + padding) + 10px margin */
+    z-index: 51; /* Above canvas, below overlays */
+    display: flex;
+    gap: 14px;
+    user-select: none;
+    pointer-events: none;
+}
+
+.score-label-single {
+    background: rgba(255,255,255,0.95);
+    border-radius: 8px;
+    color: #333;
+    box-shadow: 0 2px 8px 0 hsla(0,0%,0%,0.06);
+    font-size: 1.15rem;
+    font-family: var(--font-main);
+    font-weight: bold;
+    padding: 8px 20px;
+    min-width: 70px;
+    text-align: center;
+    pointer-events: none;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.score-label-level { /* Optionally, color accent for level */ }
+.score-label-score { /* Optionally, color accent for score */ }
+.score-label-lives { /* Optionally, color accent for lives */ }
+
+/* Old .score-label (single box) is kept for overlays, but not used in-game anymore */
+.score-label {
+    /* No-op for .score-label-single, but keep for overlays */
+}
+
+/* On small screens, adjust position and size */
+@media (max-width: 900px) {
+    #game-canvas {
+        width: 100vw;
+        max-width: 100vw;
+        height: 90vh;
+        max-height: 100vh;
+    }
+    .menu-overlay, .gameover-overlay {
+        min-width: 160px;
+        min-height: 120px;
+        padding: 24px 12px;
+    }
+    .score-label-container {
+        right: 12px;
+        top: calc(12px + 38px + 8px);
+        gap: 7px;
+    }
+    .score-label-single {
+        font-size: 0.98rem;
+        padding: 6px 10px;
+        min-width: 48px;
+    }
+}
+
+@keyframes fadein {
+    from { opacity: 0; transform: scale(1.08);}
+    to { opacity: 1; transform: scale(1);}
+}
